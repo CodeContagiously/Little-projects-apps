@@ -15,6 +15,7 @@ class Net:
             Return each subnet and it's Range'''
 
     def subClass(self, IPAddress):
+        ''' Returnn the IP class of the IPAddress'''
         if ip(IPAddress).firstOct() <= 127:
             return "Class A"
         if ip(IPAddress).firstOct() <= 191:
