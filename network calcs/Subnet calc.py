@@ -24,4 +24,6 @@ class Net:
             return "Class C"
         if ip(IPAddress).firstOct() <= 224:
             return "Class D"
+    def subnetNumber(self, subNetID/CDR):
+        '''return the subnet number of the subnet'''
         
