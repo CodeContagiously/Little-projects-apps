@@ -1,29 +1,26 @@
 """ This program performes subnetting computations """
 import IP as ip
 class Net:
-    def __init__():
+    bitVal = [128,64,32,16,8,4,2,1] ##bit value for each bit in an IP octed
+    def IPSubnet(self, IPAddress_CDR):##sample input parameter: 10.11.10.1/24
+        """return the subnet given the IP address and CDR number"""
+        CDR = IPAddress_CDR[IPAddress_CDR.index("/"):] #get CDR number
+        subNet = []
+        while CDR>=8:
+            subNet.append("255")
+            CDR -= 8
+        subNet.append(str(sum(self.bitVal[:4]))) ##add the last subnet Value to subnet
+        return ".".join(subNet) ##return Subnet as string
+
+    def NetRange(self, IPAddress_CDR):
+        ''' returns the IP address range of given Network or SubnetWork '''
+        subnet = self.IPSubnet(IPAddress_CDR)##get the subnet of IP address
 
 
-    def IPSubnet(self, IPAddress/CDR):
-        '''return the subnet given IP address and CDR number'''
-
-    def NetRange(self, IPAddress/CDR):
-        ''' returns the IP address range '''
-
-    def subNet(self, IPAddress/CDR, numberOfNet):
+    def subNet(self, IPAddress_CDR, numberOfNet):
         ''' Using VLSM, segment the network as specified
             Return each subnet and it's Range'''
 
     def subClass(self, IPAddress):
-        ''' Returnn the IP class of the IPAddress'''
-        if ip(IPAddress).firstOct() <= 127:
-            return "Class A"
-        if ip(IPAddress).firstOct() <= 191:
-            return "Class B"
-        if ip(IPAddress).firstOct() <= 223:
-            return "Class C"
-        if ip(IPAddress).firstOct() <= 224:
-            return "Class D"
-    def subnetNumber(self, subNetID/CDR):
-        '''return the subnet number of the subnet'''
-        
+        """Return the class of the IP address"""
+        return ip(IPAddress).Class

@@ -3,8 +3,19 @@
 class IP:
     def __inti__(self, IPaddress):
         self.ip = IPaddress
-
-    def firstOct(self):
-        '''returns the decimal value of first octet in IPaddress'''
-        endIndx = self.ip.index(".")#gives first index of substring "."
-        return self.ip[:endIndx]
+        IPaddress = IPaddress.split(".")
+        self.firstOct = IPaddress[0] ##first octed of IP address
+        self.secOct = IPaddress[1] ##sec octed
+        self.thirdOct = IPaddress[2] ##third Octed
+        self.fourthOct = IPaddress[3] ## fourth Octed
+    def Class(self):
+        if self.firstOct() <= 127:
+            return "Class A"
+        if self.firstOct() <= 191:
+            return "Class B"
+        if self.firstOct() <= 223:
+            return "Class C"
+        if self.firstOct() <= 224:
+            return "Class D"
+    def IP_BitVal(self):
+        """Return Binary equivalent of IP address"""
