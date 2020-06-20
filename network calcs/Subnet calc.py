@@ -13,9 +13,8 @@ class Net:
         return ".".join(subNet) ##return Subnet as string
 
     def NetRange(self, IPAddress_CDR):
-        ''' returns the IP address range of given Network or SubnetWork '''
+        """ returns the IP address range of given Network or SubnetWork """
         subnet = self.IPSubnet(IPAddress_CDR)##get the subnet of IP address
-
 
     def subNet(self, IPAddress_CDR, numberOfNet):
         ''' Using VLSM, segment the network as specified

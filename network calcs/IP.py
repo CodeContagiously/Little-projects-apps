@@ -2,6 +2,7 @@
 
 class IP:
     def __inti__(self, IPaddress):
+        BitVal = [128,64,32,16,8,4,2,1] ##value of bits in each octed of ip
         self.ip = IPaddress
         IPaddress = IPaddress.split(".")
         self.firstOct = IPaddress[0] ##first octed of IP address
@@ -19,3 +20,9 @@ class IP:
             return "Class D"
     def IP_BitVal(self):
         """Return Binary equivalent of IP address"""
+        ip = self.ip.split(".")##create a list object of IP
+        ##convert each val to binary
+        ##Use Binary module I made
+
+    def DecimalBit(self):
+        """returns the Decimal value of Binary IP """
