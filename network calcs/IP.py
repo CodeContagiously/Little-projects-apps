@@ -1,5 +1,5 @@
 """This class handles computations with octet groups in IPv4 address"""
-
+import BinaryDecimal as BiDec
 class IP:
     def __inti__(self, IPaddress):
         BitVal = [128,64,32,16,8,4,2,1] ##value of bits in each octed of ip
