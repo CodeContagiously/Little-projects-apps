@@ -4,7 +4,7 @@
 import random
 
 class Card:
-    '''buildcard objects'''
+    '''build card object'''
     ##every card object have ranking and alliance2666
     def __init__(self, rank, alliance, value):
         self.rank = rank 
@@ -47,100 +47,98 @@ class Deck:
 
 
 class Player:
+    ''' defines the player object
+        Each player has a name and hold a set of cards
+    '''
     def __init__(self, playerName):
         self.name = playerName
         self.cards = []##cards up
-        self.war_cards = []
-    def playcard():
+        self.faceDown = []
+        self.faceUp = []
+        
+    def playCard(self):
         '''return card from player's set '''
-        return self.cards.pop()##play a card from player's set
-    def playWarcard():
-        return self.war_cards.pop()
+        if self.faceDown:
+            return self.faceDown.pop()##play a card from player faceDown deck
+        elif self.faceUp:
+            ##faceUp cards to faceDown Deck and suffle
+            self.addCards(self.faceUp, "down")
+            self.shuffle()
+            return self.faceDown.pop()
+    def shuffle(self):
+        '''shuffles card in faceDown deck'''
+        random.shuffle(self.faceDown)
+    def addCards(self, arrayOfCards, deck=None):
+        if deck == 'down':##add cards to player deck of faceDown cards
+            self.faceDown = self.faceDown + arrayOfCards
+        else: ##add win cards to players deck of win plays
+            self.faceUp = self.faceUp + arrayOfCards
+    def countCards(self):
+        ##count total number of cards player holds
+        return len(self.faceDown + self.faceUp)
+    
     def __repr__(self):
         return f"name {self.name}\n cards {self.cards}"
-
-
-
-
-class CardGame:##this is where we play the game
-
-    deck_of_Cards = Deck()
-    player1 = Player(None)
-    player2 = Player(None)
     
-    def Distribute(self,player1,player2,DECK):
-        '''add cards from deck to players set'''
-#         print(DECK,len(DECK))
-        for rep in range(26): ##distribute cards evenly among the players
-            self.player1.cards.append(DECK.pop())##add cards from dec to players set
-            self.player2.cards.append(DECK.pop())
     
-    def compare(self,player1Card,player2Card):
-        '''compare player 1 and two cards and return if player1 or 2 wins'''
-        ##compare the card rankings and return value of winner(1 or 2) or tie play(o)
-        if player1Card.value > player2Card.value: return 1
-        elif player1Card.value < player2Card.value: return 2 
-        else: return 0 ##
-        
+def Board(player1, player2, card1, card2, warCards):
+    '''compare the cards played on baord'''
+    if card1.value > card2.value:
+        cards = [card1,card2] + warCards
+        player1.addCards(cards)
+    elif card1.value < card2.value: 
+        cards = [card1,card2] + warCards
+        player2.addCards(cards)
+    else: 
+        return "tie"
+def shareCards(player1, player2, deck):
+    deck = deck.deck
+    set1, set2 = [], []
+    for c in range(len(deck)-1): ##distribute cards to players, 26 cards each
+        set1.append(deck[c])
+        set2.append(deck[c+1])
+    player1.addCards(set1)
+    player2.addCards(set2)
 
-    def play(self):
-        self.player1.name = input("Player1 Enter name: ")
-        self.player2.name = input("Player2 Enter name: ")
-        self.deck_of_Cards.shuffle() ##
-        
-        self.Distribute(self.player1,self.player2,self.deck_of_Cards)
-#         print(player1.cards,player2.cards)
-        while (len(self.player1.cards)!=0 and len(self.player2.cards)!=0): ##keep playing if the players still have cards in hand
-            print(len(self.player1.cards), len(self.player2.cards))
-           ##check if players have cards in set to play before drawinf from set
-#           print(self.player1.cards, self.player2.cards)
-            player1Card,player2Card = self.player1.cards.pop(), self.player2.cards.pop()
-            
-#             print(self.compare(player1Card, player2Card))
-            if self.compare(player1Card,player2Card) == 1:
-                self.player1.cards.insert(0,player1Card)
-                self.player1.cards.insert(0,player2Card)
 
-            elif self.compare(player1Card,player2Card)==2: 
-                ##add played cards to player 2 cardset
-                self.player2.cards.insert(0,player1Card)
-                self.player2.cards.insert(0,player2Card)
-            elif self.compare(player1Card,player2Card)==0: 
-                ##if zero then the play was a tied
-                print("WAR!".center(10))
-                self.warPlay(player1Card,player2Card) 
-         
-        ##pick out the winner of the game
-        if len(player1.cards) > player2.cards: return f"The Winner is {player1.name}!!"
-        elif len(player2.cards) > player1.cards: return f"The Winner is {player2.name}!!"
-        else: return "It's a Tie Game!\n Wanna play another round?"
+def PlayGame(): 
+    
+    player1 = Player(input("Enter name of player1: ")) ##get name of player 1
+    player2 = Player(input("Enter name of player2: ")) ##get name of player 2
+    
+    Dk = Deck() ## get deck of cards
+    Dk.shuffle() ## shuffle cards
+    warCards = [] ##instantiate cards resulting from warPlay
+    
+    shareCards(player1, player2, Dk) ##distribute cards to players
+    
+    while True:
         
+        if player1.countCards() == 52:
+            return f"{player1.name} Wins!"
+        elif player2.countCards()==52:
+            return f"{player2.name} Wins!"
         
+        ##check case when player does not have cards to play and the other does not have 52 cards
+        elif player1.countCards()==0: 
+            return f"{player2.name} Wins!"
+        elif player2.countCards()==0: 
+            return f"{player1.name} Wins!"
         
-    def warPlay(self,player1Card,player2Card):
-        '''play from war set of cards'''
-#       player1Card,player2Card = player1.war_cards.pop(), player2.war_cards.pop()
-        ##cards on board
-        boardcards = [player1Card,player2Card]
-        facedownCards = []##
-         
-        while len(self.player1.cards)>=2 and len(self.player2.cards)>=2: ##you need at least 2 cards to play war
-            facedownCards.extend([self.player1.cards.pop(), self.player2.cards.pop()])
-            player1Card, player2Card = self.player1.cards.pop(), self.player2.cards.pop()
-            
-            if self.compare(player1Card,player2Card)==1:
-                ##add board, facedown cards to player1 card list
-#                 print(facedownCards,boardcards)
-                self.player1.cards = facedownCards+boardcards + self.player1.cards
-                break
-            elif self.compare(player1Card,player2Card)==2:
-#                 print(facedownCards,boardcards)
-                self.player2.cards = facedownCards+boardcards+self.player2.cards
-                break
-
-            elif self.compare(player1Card,player2Card)==0:
-#                 print(facedownCards,boardcards)
-                self.warPlay(player1Card,player2Card)
-           
-#         DO: the cards on board/facedown cards goes to player with most cards. if the other player runs out of cards
+        ##proceed to playe
+        card1 = player1.playCard()
+        card2 = player2.playCard()
+        
+        print(card1.value,card2.value) ##debugging purpose
+        
+        if Board(player1, player2, card1, card2, warCards) == "tie":
+            ##players play faceDown Cards from their deck
+            ##check if each player still has cards to play
+            if player1.countCards()==0: 
+                return f"{player2.name} Wins!"
+            elif player2.countCards()==0:
+                return f"{player1.name} Wins!"
+            downCard1, downCard2 = player1.playCard(), player2.playCard()
+            warCards = warCards + [card1, card2, downCard1, downCard2] ##add cards resulting from war play to War Deck
+            ##proceed to next play
         
